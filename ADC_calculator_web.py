@@ -3,11 +3,11 @@ import streamlit as st
 st.title("動物施打劑量與溶液配置計算機")
 
 st.header("填入基本信息")
-dose = st.number_input("給藥劑量 (mg/kg)", min_value=0.0, step=0.1)
-weight = st.number_input("動物平均體重 (g)", min_value=0.0, step=0.1)
-inj_vol = st.number_input("給藥體積 (ul)", min_value=0.0, step=0.1)
-n_animal = st.number_input("動物數量 (隻)", min_value=1, step=1, format="%d")
-stock_conc = st.number_input("母液濃度 (mg/ml)", min_value=0.0, step=0.1)
+dose = st.text_input("給藥劑量 (mg/kg)")
+weight = st.text_input("動物平均體重 (g)")
+inj_vol = st.text_input("給藥體積 (ul)")
+n_animal = st.text_input("動物數量 (隻)")
+stock_conc = st.text_input("母液濃度 (mg/ml)")
 
 st.header("填入配方組成")
 st.markdown(
@@ -20,30 +20,19 @@ st.markdown(
 
 if '配方' not in st.session_state:
     st.session_state['配方'] = {
-        'DMSO': 0.0,
-        'EtOH': 0.0,
-        'PEG400': 0.0,
-        'Tween80': 0.0,
-        'HPCD': 0.0,
-        'ddH2O': 0.0
+        'DMSO': "",
+        'EtOH': "",
+        'PEG400': "",
+        'Tween80': "",
+        'HPCD': "",
+        'ddH2O': ""
     }
 
-dmsoper = st.number_input(
-    "DMSO (%)", min_value=0.0, max_value=100.0, step=0.1, value=float(st.session_state['配方']['DMSO'])
-)
-etohper = st.number_input(
-    "EtOH (%)", min_value=0.0, max_value=100.0, step=0.1, value=float(st.session_state['配方']['EtOH'])
-)
-pegper = st.number_input(
-    "PEG400 (%)", min_value=0.0, max_value=100.0, step=0.1, value=float(st.session_state['配方']['PEG400'])
-)
-tweenper = st.number_input(
-    "Tween 80 (%)", min_value=0.0, max_value=100.0, step=0.1, value=float(st.session_state['配方']['Tween80'])
-)
-hpcdper = st.number_input(
-    "HPCD（水合環糊精）(%)", min_value=0.0, max_value=100.0, step=0.1, value=float(st.session_state['配方']['HPCD'])
-)
-# ddH2O 不讓使用者手動填寫，計算時自動補
+dmsoper = st.text_input("DMSO (%)", value=st.session_state['配方']['DMSO'], key="dmsoper")
+etohper = st.text_input("EtOH (%)", value=st.session_state['配方']['EtOH'], key="etohper")
+pegper = st.text_input("PEG400 (%)", value=st.session_state['配方']['PEG400'], key="pegper")
+tweenper = st.text_input("Tween 80 (%)", value=st.session_state['配方']['Tween80'], key="tweenper")
+hpcdper = st.text_input("HPCD（水合環糊精）(%)", value=st.session_state['配方']['HPCD'], key="hpcdper")
 
 # 更新 session_state
 st.session_state['配方'] = {
@@ -52,23 +41,31 @@ st.session_state['配方'] = {
     'PEG400': pegper,
     'Tween80': tweenper,
     'HPCD': hpcdper,
-    'ddH2O': 0.0  # 這裡不讓使用者手動填，計算時自動補
+    'ddH2O': ""
 }
 
 if st.button("計算配方"):
     try:
-        # 基本資訊計算
-        if inj_vol == 0 or stock_conc == 0 or n_animal == 0:
-            raise Exception
-        work_conc = dose * (weight / 1000) / (inj_vol / 1000)
-        total_vol = inj_vol * n_animal
-        stock_vol = (work_conc * total_vol / 1000) / stock_conc * 1000  # ul
+        # 轉型
+        dose_f = float(dose)
+        weight_f = float(weight)
+        inj_vol_f = float(inj_vol)
+        n_animal_f = float(n_animal)
+        stock_conc_f = float(stock_conc)
+        dmsoper_f = float(dmsoper)
+        etohper_f = float(etohper)
+        pegper_f = float(pegper)
+        tweenper_f = float(tweenper)
+        hpcdper_f = float(hpcdper)
 
-        # 母液百分比
+        if inj_vol_f == 0 or stock_conc_f == 0 or n_animal_f == 0:
+            raise Exception
+        work_conc = dose_f * (weight_f / 1000) / (inj_vol_f / 1000)
+        total_vol = inj_vol_f * n_animal_f
+        stock_vol = (work_conc * total_vol / 1000) / stock_conc_f * 1000  # ul
+
         stock_per = stock_vol / total_vol * 100
-        # 其他溶劑百分比總和
-        user_sum = dmsoper + etohper + pegper + tweenper + hpcdper
-        # ddH2O 百分比 = 100 - (母液百分比 + 其他溶劑百分比)
+        user_sum = dmsoper_f + etohper_f + pegper_f + tweenper_f + hpcdper_f
         ddh2oper = 100 - (stock_per + user_sum)
         if ddh2oper < 0:
             ddh2oper = 0
