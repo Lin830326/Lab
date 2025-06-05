@@ -46,17 +46,17 @@ st.session_state['配方'] = {
 
 if st.button("計算配方"):
     try:
-        # 轉型
-        dose_f = float(dose)
-        weight_f = float(weight)
-        inj_vol_f = float(inj_vol)
-        n_animal_f = float(n_animal)
-        stock_conc_f = float(stock_conc)
-        dmsoper_f = float(dmsoper)
-        etohper_f = float(etohper)
-        pegper_f = float(pegper)
-        tweenper_f = float(tweenper)
-        hpcdper_f = float(hpcdper)
+        # 轉型，沒填寫自動為0
+        dose_f = float(dose or 0)
+        weight_f = float(weight or 0)
+        inj_vol_f = float(inj_vol or 0)
+        n_animal_f = float(n_animal or 0)
+        stock_conc_f = float(stock_conc or 0)
+        dmsoper_f = float(dmsoper or 0)
+        etohper_f = float(etohper or 0)
+        pegper_f = float(pegper or 0)
+        tweenper_f = float(tweenper or 0)
+        hpcdper_f = float(hpcdper or 0)
 
         if inj_vol_f == 0 or stock_conc_f == 0 or n_animal_f == 0:
             raise Exception
@@ -71,11 +71,11 @@ if st.button("計算配方"):
             ddh2oper = 0
 
         # 各溶劑體積
-        dmsovol = total_vol * dmsoper / 100
-        etohvol = total_vol * etohper / 100
-        pegvol = total_vol * pegper / 100
-        tweenvol = total_vol * tweenper / 100
-        hpcdvol = total_vol * hpcdper / 100
+        dmsovol = total_vol * dmsoper_f / 100
+        etohvol = total_vol * etohper_f / 100
+        pegvol = total_vol * pegper_f / 100
+        tweenvol = total_vol * tweenper_f / 100
+        hpcdvol = total_vol * hpcdper_f / 100
         ddh2ovol = total_vol * ddh2oper / 100
 
         st.info(
