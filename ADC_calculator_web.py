@@ -25,7 +25,7 @@ if '配方' not in st.session_state:
         'PEG400': "",
         'Tween80': "",
         'HPCD': "",
-        'ddH2O': ""
+        'ddH2O': 0.0
     }
 
 dmsoper = st.text_input("DMSO (%)", value=st.session_state['配方']['DMSO'], key="dmsoper")
@@ -41,7 +41,7 @@ st.session_state['配方'] = {
     'PEG400': pegper,
     'Tween80': tweenper,
     'HPCD': hpcdper,
-    'ddH2O': ""
+    'ddH2O': 0.0
 }
 
 if st.button("計算配方"):
