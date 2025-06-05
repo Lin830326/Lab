@@ -17,6 +17,7 @@ st.markdown(
     </span>
     """, unsafe_allow_html=True
 )
+st.markdown(
     """
     <span style='color:red'>
     ("請先確認藥物是否有相關文獻或是說明，確認其溶劑的安全性與使用比例。")
