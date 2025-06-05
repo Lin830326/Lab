@@ -14,7 +14,7 @@ st.markdown(
     """
     <span style='color:red'>
     DMSO ≤ 5%；EtOH ≤ 5%；PEG400 ≤ 10–20%；Tween 80 ≤ 5%；HPCD（水合環糊精）≤ 10–20%
-    text = st.text_input("請先確認藥物是否有相關文獻或是說明，確認其溶劑的安全性與使用比例。")
+    ("請先確認藥物是否有相關文獻或是說明，確認其溶劑的安全性與使用比例。")
     </span>
     """, unsafe_allow_html=True
 )
